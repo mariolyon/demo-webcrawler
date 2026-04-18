@@ -4,14 +4,14 @@ function isValidUrl(s: string) {
   try {
     new URL(s)
     return true
-  } catch (err) {
+  } catch {
     return false
   }
 }
 
-const USAGE = `USAGE: node main url`
+const USAGE = `USAGE: node src/index.ts <url>`
 
-if (process.argv.length != 3 || !isValidUrl(process.argv[2])) {
+if (process.argv.length !== 3 || !isValidUrl(process.argv[2])) {
   console.log(USAGE)
   process.exit(1)
 } else {

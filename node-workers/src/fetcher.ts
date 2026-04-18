@@ -13,25 +13,18 @@ export function init(testMode: boolean) {
 
 export async function process(baseLink: Link): Promise<Links> {
   const baseUrl = new URL(baseLink)
-  return streamPage(baseUrl)
-    .then((htmlStream: Readable) =>
-      processLinksIn(htmlStream).then((links: Links) => {
-        const relevantLinks = links.filter((link: Link) => {
-          const url = urlFor(baseUrl, link)
-          return url.hostname === baseUrl.hostname
-        })
-        return relevantLinks
-      })
-    )
-    .catch((err) => {
-      throw err
-    })
+  const htmlStream = await streamPage(baseUrl)
+  const links = await processLinksIn(htmlStream)
+  return links.filter((link: Link) => {
+    const url = urlFor(baseUrl, link)
+    return url.hostname === baseUrl.hostname
+  })
 }
 
 function createParser(links: Array<string>): WritableStream {
   return new WritableStream({
     onopentag(name, attribs) {
-      if (name == 'a') {
+      if (name === 'a' && attribs.href) {
         links.push(attribs.href)
       }
     },

@@ -17,9 +17,6 @@ if (process.argv.length != 3 || !isValidUrl(process.argv[2])) {
 } else {
   const crawler = new Crawler()
   crawler.crawl(process.argv[2])
-    .then((links) => {
-      console.log(links)
-    })
     .catch((err) => {
       console.error(err)
       process.exit(1)

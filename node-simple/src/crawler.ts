@@ -10,6 +10,7 @@ export default class Crawler {
   jobs: Array<Promise<void>> = []
   queue: string[] = []
   seen: Set<Link> = new Set()
+  visitCount: number = 0
 
   private processQueue() {
     while (this.jobsInProgress < MAX_JOBS && this.queue.length > 0) {
@@ -23,6 +24,7 @@ export default class Crawler {
   }
 
   private async visitUrl(baseUrl: Link): Promise<void> {
+    this.visitCount++
     const fetcher = new Fetcher(baseUrl)
     return fetcher
       .start()
